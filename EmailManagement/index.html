@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *{
+            font-family: sans-serif;
+        }
+        .wrapper-email{
+            margin: 0 20%;
+        }
+        .wrapper-header{
+            display: flex;
+            justify-content: center;
+        }
+        #confirm-img{
+            width: 30%;
+        }
+        h1{
+            text-align: center;
+        }
+        h2{
+            font-size: 20px;
+        }
+        .body-email{
+            margin: 0 20%;
+        }
+        p{
+            text-align: left;
+            line-height: 2;
+        }
+        .icon{
+            font-size: 30px;   
+            transform: rotate(90deg)
+        }
+        .star{
+            color: rgb(206, 206, 87);
+        }
+        .btn-wrapper{
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn{
+            padding: 20px 40px;
+            cursor: pointer;
+            background-color: rgba(8, 8, 162, 0.953);
+            color: white;
+            border: none;
+            outline: none;
+            font-size: 20px;
+            border-radius: 5px;
+        }
+        .btn:hover{
+            background-color: rgb(44, 44, 234);
+        }
+        .email-signature {
+                      font-family: Arial, sans-serif;
+                      font-size: 14px;
+                      color: #333333;
+                      margin-top: 20px;
+                    }
+
+                    .signature-name {
+                      font-weight: bold;
+                    }
+
+                    .signature-title {
+                      color: #999999;
+                    }
+    </style>
+    <title>Document</title>
+</head>
+
+
+<body>
+    <div class="wrapper-email">
+        <div class="wrapper-header">
+            <img id="confirm-img" src="https://img.freepik.com/premium-vector/opened-envelope-document-with-green-check-mark-line-icon-official-confirmation-message-mail-sent-successfully-email-delivery-verification-email-flat-design-vector_662353-720.jpg?w=2000" />
+        </div>
+        <div class="body-email">
+           <h1> <span class="star">&#9885;</span> Verify your email <span class="star">&#9885;</span></h1>
+           <h2>Xin chào Duy,</h2>
+           <div class="wrapper-content">
+                <p class="content"> Chúng tôi cần xác thực email của bạn,
+                click vào nút bên dưới để hoàn thành việc đăng ký tài khoản: 
+                </p>          
+           </div>
+           <div class="btn-wrapper">
+            <a>
+                <button class="btn">
+                    Verify your email
+                </button>
+            </a>  
+           </div>
+           <div class="email-signature">
+            <p class="signature-name">Thanh Duy</p>
+            <p class="signature-title">Quản lí cấp cao - Thanh Duy Luxury</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

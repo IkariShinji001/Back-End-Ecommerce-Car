@@ -1,0 +1,11 @@
+# Bỏ qua file .env
+.env
+
+# Bỏ qua folder node_modules
+node_modules/
+
+# Bỏ qua file yarn.lock
+yarn.lock
+
+# Bỏ qua file package-lock.json
+package-lock.json
