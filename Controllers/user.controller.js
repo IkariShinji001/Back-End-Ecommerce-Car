@@ -9,14 +9,28 @@ const emailTemplates = require("../EmailManagement/emailTemplates");
 
 
 const UserController = {
-    async getAllUsers(req, res){
+    async getAllUser(req, res){
         try{
             const users = await Users.find({});
-            return res.json(users);
+            return res.status(200).json(users);
         }catch(error){
-            return res.json({error});
+            return res.status(500).json({error});
         }
-       
+    },
+
+    async getOneUser(req, res){
+        const _id = req.params.id;
+        try{
+            const user = await Users.findOne({_id});
+            if(user){
+                return res.status(200).json(user);
+            }else{
+                return res.status(404).json({error: "Không tìm thấy user"});
+            }
+            
+        }catch(error){
+            return res.status(500).json({error});
+        }
     },
 
     async createUser(req, res){
@@ -48,20 +62,20 @@ const UserController = {
                 
                 res.status(201).json("Created");
             }else{
-                return res.json("Existed Account");
+                return res.status(409).json("Existed Account");
             }
         } catch (error) {
-            return res.json({error});
+            return res.status(500).json({error});
         }
     },
     
     async deleteUser(req, res){
         try {
-            const username = req.body.username;
-            await Users.deleteOne({username: username})
-            return res.json("Deleted");
+            const id = req.params.id;
+            await Users.deleteOne({ _id : id})
+            return res.status(200).json("Deleted");
         } catch (error) {
-            console.log(error);
+            return res.status(500).json({error});
         }
     },
 
@@ -72,20 +86,20 @@ const UserController = {
             const userInDB = await Users.findOne({username: username});
             if(userInDB){
                 if(!userInDB.isVerified){
-                    return res.json({error: "Chưa xác thực email"});
+                    return res.status(401).json({error: "Chưa xác thực email"});
                 }
                 const isMatchPassword = await bcrypt.compare(password, userInDB.password);
                 if(isMatchPassword){
                     const token = jwt.sign({username, password, role: userInDB.role}, process.env.JWT_SECRET_KEY, {expiresIn: "3h"});
                     return res.status(200).json({token});
                 }else{
-                    return res.status(401).json({error:"Wrong password"});
+                    return res.status(400).json({error:"Sai tên đăng nhập hoặc mật khẩu"});
                 }
             }else{
-                return res.status(401).json({error: "Wrong username or password"});
+                return res.status(400).json({error: "Sai tên đăng nhập hoặc mật khẩu"});
             }
         }catch(error){
-             return res.json({error});
+             return res.status(500).json({error});
         }
      
     },

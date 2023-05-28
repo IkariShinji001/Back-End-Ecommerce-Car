@@ -4,14 +4,13 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Ecomerce Car API",
-      description: "Documentation for Car API",
+      title: "Ecommerce-Car API",
+      description: "Documentation for Ecommerce-Car API",
       version: "1.0.0",
     },
     servers: [
       {
         url: "http://localhost:3000",
-        description: "Development server",
       },
     ],
   },
