@@ -4,18 +4,17 @@ const authentication = require("../Middleware/Authentication");
 const authorization = require("../Middleware/Authorization");
 const userController = require("../Controllers/user.controller");
 
-route.get("/users",authentication, authorization, userController.getAllUser);
+route.get("/users", userController.getAllUsers);
 
-route.get("/users/:id", userController.getOneUser);
+route.get("/users/:id", userController.getUserById);
 
-route.post("/users/login", userController.login);
+route.post("/users",userController.createUser);
 
-route.get("/users/verify", userController.verify);
+route.patch("/users/:id", userController.updateUserInforById);
 
-route.post("/users/create",userController.createUser);
+route.delete("/users/:id", authentication, authorization, userController.deleteUserById);
 
-route.delete("/users/delete/:id", authentication, authorization, userController.deleteUser);
-
+route.patch("/users/:id/password", userController.changePasswordById);
 
 module.exports = route;
 

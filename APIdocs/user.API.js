@@ -107,7 +107,7 @@
 
 /**
  * @swagger
- * /api/users/create:
+ * /api/users:
  *   post:
  *     summary: Tạo mới người dùng
  *     tags: [User]
@@ -274,7 +274,7 @@
 
 /**
  * @swagger
- * api/users/verify:
+ * /api/users/verify:
  *   get:
  *     summary: Xác thực người dùng
  *     tags: [User]

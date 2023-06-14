@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 const carSchema = new mongoose.Schema({
-  make: String,  // Nhãn hiệu xe
-  model: {type: String, unique: true},  // Mô hình xe (duy nhất)
-  classification: String,
+  brand: String,
+  name: String,
+  model: {type: String, unique: true},  // Phiên bản xe
+  classification: String, // Loại xe
   year: Number,  // Năm sản xuất
   price: Number,  // Giá xe
   description: {
@@ -30,7 +31,9 @@ const carSchema = new mongoose.Schema({
     topSpeed: Number,  // Vận tốc tối đa (km/h)
   },
   images: [String],  // Mảng chứa các URL hình ảnh
-  createdAt: { type: Date, default: Date.now }  // Ngày tạo bản ghi
+  createdAt: { type: Date, default: Date.now }, // Ngày tạo bản ghi
+  quantity: Number,
+  isInBussiness: {type: Boolean, default: true} // Trạng thái kinh doanh
 });
 
 const Car = mongoose.model('Car', carSchema);

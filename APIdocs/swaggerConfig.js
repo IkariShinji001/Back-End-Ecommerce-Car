@@ -14,7 +14,9 @@ const options = {
       },
     ],
   },
-  apis: ["./APIdocs/user.API.js"]
+  apis: ["./APIdocs/user.API.js",
+        "./APIdocs/car.API.js"
+        ]
 };
 
 const specs = swaggerJsdoc(options);

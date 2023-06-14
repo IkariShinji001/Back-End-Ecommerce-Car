@@ -2,14 +2,16 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocs = require("./APIdocs/swaggerConfig");
+app.use(cors());
 
-
-// Route 
+// Routes
 const userRoute = require("./Routes/user.route");
 const carRoute = require("./Routes/car.route");
-const transactionRoute = require("./Routes/transaction.route");
+const authRoute = require("./Routes/auth.route");
+const salesRoute = require("./Routes/sale.route");
 
 
 dotenv.config();
@@ -28,15 +30,13 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 
 
-
-
-
 // Define route
 app.use(process.env.BASE_API, userRoute);
 app.use(process.env.BASE_API, carRoute);
-app.use(process.env.BASE_API, transactionRoute);
-
+app.use(process.env.BASE_API, authRoute);
+app.use(process.env.BASE_API, salesRoute);
+ 
 
 app.listen(process.env.PORT, () =>{
-    console.log("Server is running on " + process.env.PORT);
+    console.log("Server is running on port " + process.env.PORT);
 }) 

@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   firstName: String,
   lastName: String,
   phoneNumber: String,
-  role: String,
+  role: {type: String, default: "user"},
   isVerified: { type: Boolean, default: false },
   verificationToken: { type: String, required: true },
   createdAt: { type: Date, default: Date.now }
