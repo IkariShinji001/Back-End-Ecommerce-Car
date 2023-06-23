@@ -149,6 +149,34 @@ const salesController = {
         } catch (err) {
            res.json(err);
         }
+      },
+      async getTotalCarsSold(req, res) {
+        try {
+          const sales = await Sales.aggregate([
+            {
+              $lookup: {
+                from: 'cars',
+                localField: 'carId',
+                foreignField: '_id',
+                as: 'car'
+              }
+            },
+            {
+              $group: {
+                _id: { name:'$car.name', model: '$car.model'},
+                totalCarsSold: { $sum: 1 }
+              }
+            },
+            {
+              $sort: { '_id.name': 1 }
+            }
+          ]);
+      
+          res.json(sales);
+        } catch (err) {
+          console.log(err);
+          res.json(err);
+        }
       }
       
       

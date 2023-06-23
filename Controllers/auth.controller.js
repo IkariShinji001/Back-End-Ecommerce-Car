@@ -26,6 +26,7 @@ const authController = {
                 return res.status(400).json({error: "Sai tên đăng nhập hoặc mật khẩu"});
             }
         }catch(error){
+            console.log(error);
             return res.status(500).json({error});
         }
      

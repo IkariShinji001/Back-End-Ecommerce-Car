@@ -12,6 +12,7 @@ const userRoute = require("./Routes/user.route");
 const carRoute = require("./Routes/car.route");
 const authRoute = require("./Routes/auth.route");
 const salesRoute = require("./Routes/sale.route");
+const brandRoute = require("./Routes/brand.route");
 
 
 dotenv.config();
@@ -35,6 +36,7 @@ app.use(process.env.BASE_API, userRoute);
 app.use(process.env.BASE_API, carRoute);
 app.use(process.env.BASE_API, authRoute);
 app.use(process.env.BASE_API, salesRoute);
+app.use(process.env.BASE_API, brandRoute);
  
 
 app.listen(process.env.PORT, () =>{

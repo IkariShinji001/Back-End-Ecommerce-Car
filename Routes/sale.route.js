@@ -9,6 +9,8 @@ route.get("/sales/profit-by-month", salesController.getProfitByMonth);
 
 route.get("/sales/car-sold-by-month", salesController.getCarsSoldByMonth);
 
+route.get("/sales/cars/total", salesController.getTotalCarsSold);
+
 route.post("/sales", salesController.createSale);
 
 route.put("/sales/:id", salesController.updateSale);

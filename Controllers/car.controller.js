@@ -1,4 +1,5 @@
 const Cars = require("../Model/Cars");
+const Brands = require("../Model/Brand");
 const cloudinary = require("../Middleware/Cloudinary");
 const fs = require("fs"); 
 const getImageIdFromSecureUrl = require("../Helpers/getImageIdFromSecureUrl");
@@ -52,12 +53,16 @@ const carController = {
       }
     },
 
-    async  createCar(req, res) {
+    async createCar(req, res) {
       const carInfo = req.body;
       const imgs = req.files;
       const imgsUploadedCloudinary = [];
       try{
-        
+        const brand = await Brands.findOne({brand: carInfo.brand});
+
+        if(!brand){
+          return res.status(404).json({error: "Không tồn tại hãng xe này"})
+        }
         // Tải lên ảnh lên Cloudinary và chờ cho tất cả hoàn thành
         await Promise.all(
           imgs.map(async (img) => {
