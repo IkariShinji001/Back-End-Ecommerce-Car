@@ -122,6 +122,22 @@ const salesController = {
           res.status(500).json({ error: 'Đã xảy ra lỗi khi truy vấn dữ liệu.' });
         }
       },
+      async getTotalSale(req, res){
+        try {
+          const totalSale = await Sales.aggregate([
+            {
+              $group: {
+                _id: null,
+                totalSale: { $sum: "$salePrice"}
+              }
+            },
+          ]);
+          res.status(200).json({ success: true, totalSale: totalSale[0].totalSale});
+        } catch (error) {
+          console.log(error);
+          res.status(500).json({ error: 'Đã xảy ra lỗi khi truy vấn dữ liệu.' });
+        }
+      },
 
       async getCarsSoldByMonth(req, res) {
         try {
@@ -150,7 +166,8 @@ const salesController = {
            res.json(err);
         }
       },
-      async getTotalCarsSold(req, res) {
+
+      async getTotalEachCarSold(req, res) {
         try {
           const sales = await Sales.aggregate([
             {
@@ -164,7 +181,7 @@ const salesController = {
             {
               $group: {
                 _id: { name:'$car.name', model: '$car.model'},
-                totalCarsSold: { $sum: 1 }
+                totalEachCarSold: { $sum: 1 }
               }
             },
             {
@@ -176,6 +193,30 @@ const salesController = {
         } catch (err) {
           console.log(err);
           res.json(err);
+        }
+      },
+
+      async getTotalCarSold(req, res){
+        try {
+          const totalCarSold = await Sales.aggregate([
+            { $group: { _id: null, count: { $sum: 1 } } },
+            { $project: { _id: 0, count: 1 } }
+          ]);
+          return res.status(200).json({success: true, totalCarSold});
+        } catch (error) {
+          return res.status(500).json({error: "Server error"});
+        }
+      },
+
+      async getAllCarSold(req, res){
+        try {
+          const cars = await Sales.find().populate('carId');
+          
+          const sortedCars = cars.sort((a, b) => a.date - b.date);
+          res.json(sortedCars);
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ error: 'Đã xảy ra lỗi server.' });
         }
       }
       

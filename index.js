@@ -5,7 +5,9 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocs = require("./APIdocs/swaggerConfig");
-app.use(cors());
+const cookieParser = require('cookie-parser');
+app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
+app.use(cookieParser());
 
 // Routes
 const userRoute = require("./Routes/user.route");

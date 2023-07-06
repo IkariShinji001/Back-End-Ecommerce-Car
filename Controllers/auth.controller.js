@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const transporter = require("../EmailManagement/emailConfig")
 const getMailOptions = require('../EmailManagement/emailOptions');
 const emailTemplates = require("../EmailManagement/emailTemplates");
+const { v4: uuidv4 } = require('uuid');
 
 const authController = {
     async login(req, res){
@@ -17,8 +18,12 @@ const authController = {
                 }
                 const isMatchPassword = await bcrypt.compare(password, userInDB.password);
                 if(isMatchPassword){
-                    const token = jwt.sign({username, role: userInDB.role, _id: userInDB._id.toString()}, process.env.JWT_SECRET_KEY, {expiresIn: "3h"});
-                    return res.status(200).json({token});
+                    const accessToken = jwt.sign(
+                    {username, role: userInDB.role, _id: userInDB._id.toString()}, process.env.JWT_SECRET_KEY, {expiresIn: "1h"});
+                    const refreshToken = jwt.sign({id: uuidv4()} ,process.env.JWT_SECRET_KEY, {expiresIn: "1d"});
+                    res.cookie('access_token', accessToken, { httpOnly: true });
+                    res.cookie('refresh_token', refreshToken, { httpOnly: true });
+                    return res.status(200).json({success: true, accessToken});
                 }else{
                     return res.status(400).json({error:"Sai tên đăng nhập hoặc mật khẩu"});
                 }
@@ -31,8 +36,16 @@ const authController = {
         }
      
     },
-
-    async verify(req, res){
+    async logout(req, res){
+        try{
+            res.clearCookie('access_token');
+            res.clearCookie('refresh_token');
+            res.status(200).json({success: true});
+        }catch(error){
+            res.status(500).json({error: "Lỗi phía server"})
+        }
+    },
+    async verifyTokenMail(req, res){
         try{
             const verificationToken = req.query.token;
             const user = await Users.findOne({ verificationToken: verificationToken })
@@ -99,7 +112,45 @@ const authController = {
             return res.status(500).json({ error: 'Lỗi server' });
         }
 
-    }
+    },
+    async verifyRefreshToken(req, res){
+        const refreshToken = req.cookies.refresh_token;
+        const oldAccessToken = req.cookies.access_token;
+        const decodedToken = jwt.decode(oldAccessToken);
+        try {
+            if(!refreshToken){
+                return res.status(401).json({error: 'Không tìm thấy refresh token' });
+            }
+            const isVerified = jwt.verify(refreshToken, process.env.JWT_SECRET_KEY); 
+            if(isVerified){
+                const accessToken = jwt.sign({username: decodedToken.username, role: decodedToken.role, _id: decodedToken._id},process.env.JWT_SECRET_KEY,{expiresIn: "1h"});
+                res.cookie("access_token", accessToken);
+                return res.status(201).json({success: true});
+            }else{
+                return res.status(401).json({error: 'Refresh token không hợp lệ'});
+            }
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({error: "Server lỗi"});
+        }
+      
+    },
+    async verifyAccessToken(req, res) {
+        const accessToken = req.cookies.access_token;
+        try {
+          const isVerified = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
+          if (isVerified) {
+            return res.status(200).json({ success: true });
+          }
+        } catch (error) {
+          if (error.name === "TokenExpiredError") {
+            return res.status(401).json({ error: "Token Expired" });
+          } else {
+            console.log(error);
+            return res.status(500).json({ error: "Invalid Token" });
+          }
+        }
+      }
 }
 
 module.exports = authController;

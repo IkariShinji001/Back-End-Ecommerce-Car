@@ -5,7 +5,8 @@ const carSchema = new mongoose.Schema({
   name: String,
   model: {type: String, unique: true},  // Phiên bản xe
   classification: String, // Loại xe
-  year: Number,  // Năm sản xuất
+  year: Number,
+  discount: Number,  // Năm sản xuất
   price: Number,  // Giá xe
   description: {
     type: mongoose.Schema.Types.Mixed,

@@ -4,17 +4,39 @@ const cloudinary = require("../Middleware/Cloudinary");
 const fs = require("fs"); 
 const getImageIdFromSecureUrl = require("../Helpers/getImageIdFromSecureUrl");
 const mongoose = require("mongoose");
+const {escapeRegExp} = require("../Helpers/escapeRegExp")
 
 const carController = {
-    async getAllCars(req, res){
-      try{
-        const cars = await Cars.find({});
-        return res.status(200).json({success: true, data: cars});
+    async getCars(req, res){
+      const page = req.query.page || null;
+      const limit = req.query.limit || null;
+      const filter = req.query.filter || null;
+      let filterQuery = {};
+      if (filter) {
+        const escapedFilter = escapeRegExp(filter);
+        const filterPattern = new RegExp(`^${escapedFilter}`, 'i');
+        filterQuery = { name: { $regex: filterPattern } };
+      } 
+      try{     
+          const cars = await Cars.find(filterQuery).limit(limit).skip(limit*(page-1)).sort({name: 1});
+          return res.status(200).json({success: true, data: cars}); 
       }catch(error){
         console.error(error);
         return res.status(500).json({error: "Lỗi phía server"});
       }
     },
+    async getTotalCar(req, res){
+      try {
+        const totalCar = await Cars.aggregate([
+          { $group: { _id: null, count: { $sum: 1 } } },
+          { $project: { _id: 0, count: 1 } }
+        ]);
+        return res.status(200).json({success: true, totalCar});
+      } catch (error) {
+        return res.status(500).json({error: "Server error"});
+      }
+    },
+    
 
     async getCarById(req, res){
       const _id = req.params.id;      
@@ -55,32 +77,20 @@ const carController = {
 
     async createCar(req, res) {
       const carInfo = req.body;
-      const imgs = req.files;
-      const imgsUploadedCloudinary = [];
       try{
         const brand = await Brands.findOne({brand: carInfo.brand});
 
         if(!brand){
           return res.status(404).json({error: "Không tồn tại hãng xe này"})
         }
-        // Tải lên ảnh lên Cloudinary và chờ cho tất cả hoàn thành
-        await Promise.all(
-          imgs.map(async (img) => {
-            const cloudinaryUploadResult = await cloudinary.uploader.upload(img.path);
-            imgsUploadedCloudinary.push(cloudinaryUploadResult);
-          })
-        );
-        const secure_urlImg = [];
-        imgsUploadedCloudinary.forEach(img => {
-          secure_urlImg.push(img.secure_url);
-        })
-    
+        
         const newCar = new Cars({
           brand: carInfo.brand,
           classification: carInfo.classification,
           name: carInfo.name,
           model: carInfo.model,
           year: carInfo.year,
+          discount: carInfo.discount,
           price: carInfo.price,
           description: {
             engine: carInfo.engine,
@@ -104,28 +114,13 @@ const carController = {
             acceleration: carInfo.acceleration,
             topSpeed: carInfo.topSpeed
           },
-          images: secure_urlImg,
           quantity: carInfo.quantity
         });
     
         await newCar.save();
-        for(const img of imgs){
-          fs.unlinkSync(img.path);
-        }
+
         return res.json(newCar);
       } catch (error) {
-        for(const img of imgs){
-          fs.unlinkSync(img.path);
-        }
-        for(const img of imgsUploadedCloudinary){
-          cloudinary.uploader.destroy(img.public_id, function(error, result) {
-            if (error) {
-              console.error('Lỗi xảy ra:', error);
-            } else {
-              console.log('Kết quả:', result);
-            }
-          });
-        }
         console.log(error);
         return res.status(500).json({ error: "Lỗi phía server" });
       }
@@ -134,7 +129,7 @@ const carController = {
     async updateCar(req, res) {
       const carId = req.params.id;
       const updateData = req.body;
-      console.log(req.body);
+      console.log(carId);
     
       try {
         const car = await Cars.findById(carId);
@@ -204,6 +199,7 @@ const carController = {
     async deleteCarImage(req, res){
       const carId = req.params.id;
       const imageId = req.params.imageId;
+      console.log(carId, imageId)
       if (!mongoose.Types.ObjectId.isValid(carId)) {
         return res.status(400).json({ error: "carID không hợp lệ" });
       }

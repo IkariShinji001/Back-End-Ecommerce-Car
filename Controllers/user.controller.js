@@ -20,6 +20,19 @@ const UserController = {
         }
     },
 
+    async getTotalUsers(req, res){
+
+        try{
+            const totalUser = await Users.aggregate([
+            { $group: { _id: null, count: { $sum: 1 } } },
+            { $project: { _id: 0, count: 1 } }
+            ]);
+            return res.status(200).json({success: true, totalUser: totalUser[0].count});
+        }catch(error){
+            return res.status(500).json({error: "Server error"});
+        }
+    },
+
     async getUserById(req, res){
         const _id = req.params.id;
         try{
