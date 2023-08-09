@@ -12,7 +12,6 @@
  *      description: Quản lí User API
  */
 
-
 /**
  * @swagger
  * components:
@@ -55,14 +54,14 @@
  *           type: string
  *           description: Ngày tạo người dùng
  *           format: date-time
- * 
- *     
+ *
+ *
  */
 
 /**
  * @swagger
  * /api/users:
- *      get: 
+ *      get:
  *          summary: Lấy thông tin của tất cả user.
  *          tags: [Admin]
  *          description: Một mảng danh sách thông tin user.
@@ -71,7 +70,7 @@
  *                  description: Successful.
  *                  schema:
  *                      type: array
- *                      items: 
+ *                      items:
  *                          $ref: "#/components/schemas/User"
  *              500:
  *                  description: Internal Server Error
@@ -80,7 +79,7 @@
 /**
  * @swagger
  * /api/users/{id}:
- *      get: 
+ *      get:
  *          summary: Lấy thông tin người dùng theo ID.
  *          tags: [User]
  *          description:  Lấy thông tin của một người dùng dựa trên ID.
@@ -96,11 +95,11 @@
  *                  description: Successful.
  *                  schema:
  *                      type: object
- *                      items: 
+ *                      items:
  *                          $ref: "#/components/schemas/User"
  *              404:
  *                description: Không tìm thấy user.
- *          
+ *
  *              500:
  *                  description: Internal Server Error.
  */
@@ -199,7 +198,7 @@
  *              properties:
  *                token:
  *                  type: string
- * 
+ *
  *      '400':
  *        description: Sai tên người dùng hoặc mật khẩu.
  *        content:
@@ -211,7 +210,7 @@
  *                  type: string
  *              example:
  *                error: Sai tên đăng nhập hoặc mật khẩu
- *        
+ *
  *      '401':
  *        description: Người dùng chưa xác thực email.
  *        content:
@@ -223,7 +222,7 @@
  *                  type: string
  *              example:
  *                error: Chưa xác thực email
- *        
+ *
  *      '500':
  *        description: Lỗi server.
  *        content:
@@ -232,10 +231,9 @@
  *              type: object
  *              properties:
  *                error:
- *                  type: string        
- *    
+ *                  type: string
+ *
  */
-
 
 /**
  * @swagger
@@ -270,7 +268,6 @@
  *                   type: string
  *                   description: Thông báo lỗi chi tiết.
  */
-
 
 /**
  * @swagger

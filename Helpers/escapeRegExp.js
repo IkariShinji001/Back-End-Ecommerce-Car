@@ -1,7 +1,7 @@
 const escapeRegExp = (string) => {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
 
 module.exports = {
-    escapeRegExp
-}
+  escapeRegExp,
+};

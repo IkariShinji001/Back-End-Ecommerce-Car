@@ -7,8 +7,8 @@ const saleSchema = new mongoose.Schema({
   day: { type: Number, required: true },
   month: { type: Number, required: true },
   year: { type: Number, required: true },
-  date: {type: Date, require: true},
-  createdAt: { type: Date, default: Date.now }
+  date: { type: Date, require: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Sale = mongoose.model('Sale', saleSchema);

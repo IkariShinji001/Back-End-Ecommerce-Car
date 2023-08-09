@@ -1,6 +1,6 @@
 const emailTemplates = {
-    vefifyTemplateMail( username ,verificationLink){
-        const html = `
+  vefifyTemplateMail(username, verificationLink) {
+    const html = `
         <!DOCTYPE html>
         <html ⚡4email>
             <head>
@@ -101,11 +101,11 @@ const emailTemplates = {
             </div>
         </body>
     </html>   
-     `; 
-     return html;
-    },
-    forgotPasswordTemplate( username ,verificationLink){
-        const html = `
+     `;
+    return html;
+  },
+  forgotPasswordTemplate(username, verificationLink) {
+    const html = `
         <!DOCTYPE html>
         <html ⚡4email>
             <head>
@@ -206,12 +206,9 @@ const emailTemplates = {
             </div>
         </body>
     </html>   
-     `; 
-     return html;
-    }
-
-    
-}
-
+     `;
+    return html;
+  },
+};
 
 module.exports = emailTemplates;

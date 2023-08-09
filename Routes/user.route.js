@@ -1,24 +1,21 @@
-const express = require("express");
+const express = require('express');
 const route = express.Router();
-const authentication = require("../Middleware/Authentication");
-const authorization = require("../Middleware/Authorization");
-const userController = require("../Controllers/user.controller");
+const authentication = require('../Middleware/Authentication');
+const authorization = require('../Middleware/Authorization');
+const userController = require('../Controllers/user.controller');
 
-route.get("/users", userController.getAllUsers);
+route.get('/users', userController.getAllUsers);
 
-route.get("/users/total", userController.getTotalUsers);
+route.get('/users/total', userController.getTotalUsers);
 
-route.get("/users/:id", userController.getUserById);
+route.get('/users/:id', userController.getUserById);
 
-route.post("/users",userController.createUser);
+route.post('/users', userController.createUser);
 
-route.patch("/users/:id", userController.updateUserInforById);
+route.patch('/users/:id', userController.updateUserInforById);
 
-route.delete("/users/:id", authentication, authorization, userController.deleteUserById);
+route.delete('/users/:id', authentication, authorization, userController.deleteUserById);
 
-route.patch("/users/:id/password", userController.changePasswordById);
+route.patch('/users/:id/password', userController.changePasswordById);
 
 module.exports = route;
-
-
-
